@@ -232,9 +232,5 @@ export default class TaskBusiness {
         if (taskCheck) {
             throw new CustomError(412, "Precondition failed")
         }
-
-        const accessToken = this.authenticator.generateToken({ id: userId })
-
-        return accessToken
     }
 }
