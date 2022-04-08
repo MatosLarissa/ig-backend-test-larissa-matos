@@ -34,4 +34,22 @@ export class TaskController {
         }
 
     }
+
+    getAllTaskByUser = async (req: Request, res: Response) => {
+
+        const token = req.headers.authorization
+
+        try {
+
+            const result = await this.taskBusiness.getAllTaskByUser(token)
+
+            res.status(200).send({
+                result
+            })
+        } catch (error) {
+            const { statusCode, message } = error
+            res.status(statusCode || 400).send({ message })
+        }
+
+    }
 }
