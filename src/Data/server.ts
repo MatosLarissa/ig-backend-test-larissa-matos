@@ -1,4 +1,4 @@
-// import cors from "cors"
+import cors from "cors"
 import express from "express";
 import { AddressInfo } from "net";
 import dotenv from "dotenv"
@@ -8,7 +8,7 @@ dotenv.config();
 export const app = express();
 
 app.use(express.json());
-// app.use(cors())
+app.use(cors())
 
 export const server = app.listen(process.env.PORT || 3333, () => {
   if (server) {
