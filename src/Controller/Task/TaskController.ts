@@ -21,11 +21,11 @@ export class TaskController {
 
         try {
 
-            const token = await this.taskBusiness.createTask(taskInput)
+            const result = await this.taskBusiness.createTask(taskInput)
 
             res.status(201).send({
                 message: "Task created successfully!",
-                token
+                result
             })
 
         } catch (error) {
@@ -87,11 +87,11 @@ export class TaskController {
 
         try {
 
-            const token = await this.taskBusiness.updateTask(updateInput)
+            const result = await this.taskBusiness.updateTask(updateInput)
 
             res.status(200).send({
                 message: "Task successfully updated!",
-                token
+                result
             })
         } catch (error) {
             const { statusCode, message } = error
@@ -109,11 +109,11 @@ export class TaskController {
 
         try {
 
-            const token = await this.taskBusiness.deleteTask(deleteInput)
+            const result = await this.taskBusiness.deleteTask(deleteInput)
 
             res.status(200).send({
                 message: "Task successfully deleted!",
-                token
+                result
             })
         } catch (error) {
             const { statusCode, message } = error
