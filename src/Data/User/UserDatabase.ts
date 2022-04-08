@@ -75,4 +75,22 @@ export default class UserDatabase extends BaseDatabase implements UserRepository
         await BaseDatabase.destroyConnection()
     }
 
+    updateName = async (id: string, name: string, lastName: string) => {
+        try {
+            const result = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .update({
+                    name,
+                    last_name: lastName
+                })
+                .where({ id })
+                return result[0] && User.toUserModel(result[0])
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
+
 }
