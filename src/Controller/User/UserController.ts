@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import UserBusiness from "../../Business/User/UserBusiness";
 import UserDatabase from "../../Data/User/UserDatabase";
-import {  LoginInputDTO, SignupInputDTO, UpdateNameInputDTO } from "../../Model/User/User";
+import { LoginInputDTO, SignupInputDTO, UpdateNameInputDTO } from "../../Model/User/User";
 
 export class UserController {
 
@@ -22,9 +22,12 @@ export class UserController {
 
         try {
 
-            const token = await this.userBusiness.signup(signupInput)
+            const result = await this.userBusiness.signup(signupInput)
 
-            res.status(201).send({ token })
+            res.status(201).send({
+                message: "User created successfully",
+                result
+            })
 
         } catch (error) {
             const { statusCode, message } = error
@@ -64,7 +67,7 @@ export class UserController {
 
             const token = await this.userBusiness.updateName(updateInput)
 
-            res.status(200).send({ 
+            res.status(200).send({
                 message: "Name successfully updated!",
                 token
             })

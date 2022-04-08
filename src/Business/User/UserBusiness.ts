@@ -80,9 +80,6 @@ export default class UserBusiness {
         )
 
         await this.userData.createUser(user)
-        const accessToken = this.authenticator.generateToken({ id })
-
-        return accessToken
     }
 
     login = async (input: LoginInputDTO) => {
@@ -136,9 +133,6 @@ export default class UserBusiness {
 
         await this.userData.updateName(userId, name, lastName)
 
-        const accessToken = this.authenticator.generateToken({ id: user!.getId() })
-
-        return accessToken
     }
 
 }    
