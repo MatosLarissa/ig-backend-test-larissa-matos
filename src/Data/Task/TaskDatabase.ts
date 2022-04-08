@@ -145,4 +145,21 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         }
         await BaseDatabase.destroyConnection()
     }
+
+    updateTaskDate = async (id: string, date: Date) => {
+        try {
+            const tasks = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .update({
+                    date
+                })
+                .where({ id })
+            return tasks[0] && Task.toTaskModel(tasks[0])
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
 }
