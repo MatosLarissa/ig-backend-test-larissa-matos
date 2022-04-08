@@ -41,4 +41,18 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         }
         await BaseDatabase.destroyConnection()
     }
+
+    getTaskByStatus = async (done: boolean, userId: string) => {
+        try {
+            const result: any = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .select()
+                .where({ done: done, author_id: userId })
+            return result
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            } error.sqlMessage
+        }
+    }
 }
