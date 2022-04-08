@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import TaskBusiness from "../../Business/Task/TaskBusiness";
 import TaskDatabase from "../../Data/Task/TaskDatabase";
-import { TaskInputDTO } from "../../Model/Task/Task";
+import { getTasksInputDTO, TaskInputDTO } from "../../Model/Task/Task";
 
 export class TaskController {
 
@@ -42,6 +42,28 @@ export class TaskController {
         try {
 
             const result = await this.taskBusiness.getAllTaskByUser(token)
+
+            res.status(200).send({
+                result
+            })
+        } catch (error) {
+            const { statusCode, message } = error
+            res.status(statusCode || 400).send({ message })
+        }
+
+    }
+
+    getTaskByIdOrStatus = async (req: Request, res: Response) => {
+
+        const input: getTasksInputDTO = {
+            token: req.headers.authorization,
+            id: req.body.id,
+            done: req.body.done
+        }
+
+        try {
+
+            const result = await this.taskBusiness.getTaskByIdOrStatus(input)
 
             res.status(200).send({
                 result
