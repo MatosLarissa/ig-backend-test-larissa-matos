@@ -9,4 +9,5 @@ export interface TaskRepository {
     updateTaskTitle(id: string, title: string): Promise<Task | null>
     updateTaskStatus(id: string, done: boolean): Promise<Task | null>
     updateTaskDate(id: string, data: Date): Promise<Task | null>
+    deleteTaskById(id: string): Promise<void>
 }
