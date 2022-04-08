@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import TaskBusiness from "../../Business/Task/TaskBusiness";
 import TaskDatabase from "../../Data/Task/TaskDatabase";
-import { getTasksInputDTO, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
+import { deleteTaskInputDTO, getTasksInputDTO, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
 
 export class TaskController {
 
@@ -21,11 +21,11 @@ export class TaskController {
 
         try {
 
-            const token = await this.taskBusiness.createTask(taskInput)
+            const result = await this.taskBusiness.createTask(taskInput)
 
             res.status(201).send({
                 message: "Task created successfully!",
-                token
+                result
             })
 
         } catch (error) {
@@ -87,11 +87,33 @@ export class TaskController {
 
         try {
 
-            const token = await this.taskBusiness.updateTask(updateInput)
+            const result = await this.taskBusiness.updateTask(updateInput)
 
             res.status(200).send({
                 message: "Task successfully updated!",
-                token
+                result
+            })
+        } catch (error) {
+            const { statusCode, message } = error
+            res.status(statusCode || 400).send({ message })
+        }
+
+    }
+
+    deleteTask = async (req: Request, res: Response) => {
+
+        const deleteInput: deleteTaskInputDTO = {
+            token: req.headers.authorization,
+            id: req.params.id,
+        }
+
+        try {
+
+            const result = await this.taskBusiness.deleteTask(deleteInput)
+
+            res.status(200).send({
+                message: "Task successfully deleted!",
+                result
             })
         } catch (error) {
             const { statusCode, message } = error
