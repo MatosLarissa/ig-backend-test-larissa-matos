@@ -2,7 +2,7 @@ import { HashManager } from "../../Services/HashManager";
 import { IdGenerator } from "../../Services/IdGenerator";
 import { UserRepository } from "./UserRepository";
 import { Authenticator } from "../../Services/Authenticator";
-import { SignupInputDTO, User, } from "../../Model/User/User"
+import { LoginInputDTO, SignupInputDTO, UpdateNameInputDTO, User, } from "../../Model/User/User"
 import { CustomError } from "../../Error/CustomError";
 import { ValidateInput } from "../../Services/ValidateInput";
 
@@ -84,4 +84,61 @@ export default class UserBusiness {
 
         return accessToken
     }
+
+    login = async (input: LoginInputDTO) => {
+        const { email, password } = input
+
+        if (!email) {
+            throw new CustomError(422, "Please, inform a email.")
+        }
+        if (!password) {
+            throw new CustomError(422, "Please, inform a password.")
+        }
+
+        const user = await this.userData.getUserByEmail(email)
+        if (!user) {
+            throw new CustomError(404, "User not found.")
+        }
+
+        const verifyPassword = await this.hashManager.compare(password, user!.getPassword())
+        if (!verifyPassword) {
+            throw new CustomError(403, "Invalid password")
+        }
+
+        const accessToken = this.authenticator.generateToken({ id: user!.getId() })
+
+        return accessToken
+    }
+
+    updateName = async (input: UpdateNameInputDTO) => {
+        const { token, name, lastName } = input
+
+        if (!token) {
+            throw new CustomError(422, "Please, inform a name.")
+        }
+        if (!name) {
+            throw new CustomError(422, "Please, inform a name.")
+        }
+        if (!lastName) {
+            throw new CustomError(422, "Please, inform a last name.")
+        }
+
+        const tokenData = this.authenticator.getTokenData(token)
+        if (!tokenData) {
+            throw new CustomError(422, "Invalid token.")
+        }
+        const userId = tokenData.id
+
+        const user = await this.userData.getUserById(userId)
+        if (!user) {
+            throw new CustomError(404, "User not found.")
+        }
+
+        await this.userData.updateName(userId, name, lastName)
+
+        const accessToken = this.authenticator.generateToken({ id: user!.getId() })
+
+        return accessToken
+    }
+
 }    
