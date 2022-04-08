@@ -1,7 +1,7 @@
 import { IdGenerator } from "../../Services/IdGenerator";
 import { Authenticator } from "../../Services/Authenticator";
 import { CustomError } from "../../Error/CustomError";
-import { booleanToDone, stringToDone, Task, TaskInputDTO } from "../../Model/Task/Task";
+import { booleanToDone, getTasksInputDTO, stringToDone, Task, TaskInputDTO } from "../../Model/Task/Task";
 import { TaskRepository } from "./TaskRepository";
 import { DateFormat } from "../../Services/DateFormat";
 
@@ -94,6 +94,53 @@ export default class TaskBusiness {
         }
 
         return result
+
+    }
+
+    getTaskByIdOrStatus = async (input: getTasksInputDTO) => {
+        const { token, id, done } = input
+
+        if (!token) {
+            throw new CustomError(422, "Please login")
+        }
+
+        const tokenData = this.authenticator.getTokenData(token)
+        if (!tokenData) {
+            throw new CustomError(422, "Invalid token.")
+        }
+
+        const userId = tokenData.id
+
+        if (done) {
+
+            let status: boolean
+
+            const validateStatus = stringToDone(done.toUpperCase())
+
+            const validateDone = booleanToDone(validateStatus, status)
+
+            const statusTask = await this.taskData.getTaskByStatus(validateDone, userId)
+            
+
+            if (!statusTask) {
+                throw new CustomError(404, "Task not found.")
+            }
+
+            return statusTask
+        }
+
+        if (id) {
+            const task = await this.taskData.getTaskByUser(id, userId)
+            if (!task) {
+                throw new CustomError(404, "Task not found.")
+            }
+            return task
+        }
+
+        if (!done && !id) {
+            throw new CustomError(422, "Please let us know what you want to update.")
+
+        }
 
     }
 }
