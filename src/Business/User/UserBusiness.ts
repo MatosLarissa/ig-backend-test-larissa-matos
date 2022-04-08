@@ -57,7 +57,10 @@ export default class UserBusiness {
             throw new CustomError(422, "Invalid password, needs at least six characters, at least one letter and one number.")
         }
 
- 
+        const searchingExistingEmail = await this.userData.getUserByEmail(email)
+        if (searchingExistingEmail) {
+            throw new CustomError(409, "This e-mail is already in use.")
+        }
 
         const id =  this.idGenerator.generate()
 
