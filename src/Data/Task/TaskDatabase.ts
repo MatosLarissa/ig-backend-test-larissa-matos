@@ -83,4 +83,83 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         await BaseDatabase.destroyConnection()
 
     }
+
+    getTaskById = async (id: string) => {
+        try {
+            const queryResult: any = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .select()
+                .where({ id })
+            if (queryResult[0]) {
+                const result = new Task(
+                    queryResult[0].id,
+                    queryResult[0].created_at,
+                    queryResult[0].title,
+                    queryResult[0].done,
+                    queryResult[0].date,
+                    queryResult[0].author_id
+                )
+                return result
+            } else {
+                return null
+            }
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+
+    }
+
+    updateTaskTitle = async (id: string, title: string) => {
+        try {
+            const result = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .update({
+                    title
+                })
+                .where({ id })
+            return result[0] && Task.toTaskModel(result[0])
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
+
+    updateTaskStatus = async (id: string, done: boolean) => {
+        try {
+            const result = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .update({
+                    done
+                })
+                .where({ id })
+            return result[0] && Task.toTaskModel(result[0])
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
+
+    updateTaskDate = async (id: string, date: Date) => {
+        try {
+            const tasks = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .update({
+                    date
+                })
+                .where({ id })
+            return tasks[0] && Task.toTaskModel(tasks[0])
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
 }
