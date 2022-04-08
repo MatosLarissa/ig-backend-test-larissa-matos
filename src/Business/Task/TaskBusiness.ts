@@ -69,9 +69,6 @@ export default class TaskBusiness {
 
         await this.taskData.createTask(task)
 
-        const accessToken = this.authenticator.generateToken({ id: userId })
-
-        return accessToken
     }
     
     getAllTaskByUser = async (token: string) => {
@@ -197,9 +194,6 @@ export default class TaskBusiness {
 
         }
 
-        const accessToken = this.authenticator.generateToken({ id: userId })
-
-        return accessToken
     }
 
     deleteTask = async (input: deleteTaskInputDTO) => {
