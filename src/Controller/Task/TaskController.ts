@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import TaskBusiness from "../../Business/Task/TaskBusiness";
 import TaskDatabase from "../../Data/Task/TaskDatabase";
-import { getTasksInputDTO, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
+import { deleteTaskInputDTO, getTasksInputDTO, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
 
 export class TaskController {
 
@@ -91,6 +91,28 @@ export class TaskController {
 
             res.status(200).send({
                 message: "Task successfully updated!",
+                token
+            })
+        } catch (error) {
+            const { statusCode, message } = error
+            res.status(statusCode || 400).send({ message })
+        }
+
+    }
+
+    deleteTask = async (req: Request, res: Response) => {
+
+        const deleteInput: deleteTaskInputDTO = {
+            token: req.headers.authorization,
+            id: req.params.id,
+        }
+
+        try {
+
+            const token = await this.taskBusiness.deleteTask(deleteInput)
+
+            res.status(200).send({
+                message: "Task successfully deleted!",
                 token
             })
         } catch (error) {
