@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import TaskBusiness from "../../Business/Task/TaskBusiness";
 import TaskDatabase from "../../Data/Task/TaskDatabase";
-import { getTasksInputDTO, TaskInputDTO } from "../../Model/Task/Task";
+import { getTasksInputDTO, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
 
 export class TaskController {
 
@@ -67,6 +67,31 @@ export class TaskController {
 
             res.status(200).send({
                 result
+            })
+        } catch (error) {
+            const { statusCode, message } = error
+            res.status(statusCode || 400).send({ message })
+        }
+
+    }
+
+    updateTask = async (req: Request, res: Response) => {
+
+        const updateInput: UpdateTaskInputDTO = {
+            token: req.headers.authorization,
+            id: req.params.id,
+            title: req.body.title,
+            done: req.body.done,
+            date: req.body.date,
+        }
+
+        try {
+
+            const token = await this.taskBusiness.updateTask(updateInput)
+
+            res.status(200).send({
+                message: "Task successfully updated!",
+                token
             })
         } catch (error) {
             const { statusCode, message } = error
