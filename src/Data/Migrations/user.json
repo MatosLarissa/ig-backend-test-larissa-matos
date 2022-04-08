@@ -1,0 +1,18 @@
+[
+    {
+        "id": "1",
+        "name": "Larissa",
+        "last_name": "Matos",
+        "cpf": "24557523970",
+        "email": "matosl@email.com",
+        "password": "tesTe12"
+    },
+    {
+        "id": "2",
+        "name": "Pedro",
+        "last_name": "Vidal",
+        "cpf": "54557523979",
+        "email": "vidal@email.com",
+        "password": "tesTe23"
+    }
+]
