@@ -1,7 +1,7 @@
 import { IdGenerator } from "../../Services/IdGenerator";
 import { Authenticator } from "../../Services/Authenticator";
 import { CustomError } from "../../Error/CustomError";
-import { booleanToDone, getTasksInputDTO, stringToDone, Task, TaskInputDTO } from "../../Model/Task/Task";
+import { booleanToDone, getTasksInputDTO, stringToDone, Task, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
 import { TaskRepository } from "./TaskRepository";
 import { DateFormat } from "../../Services/DateFormat";
 
@@ -48,7 +48,7 @@ export default class TaskBusiness {
 
         const dateCreated = new Date()
 
-        const taskDate = this.dateFormat.formatPT(date)
+        const taskDate = this.dateFormat.formatPT(date) as Date
 
         let status: boolean
 
@@ -142,5 +142,59 @@ export default class TaskBusiness {
 
         }
 
+    }
+
+    updateTask = async (input: UpdateTaskInputDTO) => {
+        const { token, id, title, done, date, } = input
+
+        if (!token) {
+            throw new CustomError(422, "Please login")
+        }
+
+        const tokenData = this.authenticator.getTokenData(token)
+        if (!tokenData) {
+            throw new CustomError(422, "Invalid token.")
+        }
+
+        const userId = tokenData.id
+
+        const task = await this.taskData.getTaskById(id)
+        if (!task) {
+            throw new CustomError(404, "Task not found.")
+        }
+
+        const checkTaskUser = await this.taskData.getTaskByUser(id, userId)
+        if (!checkTaskUser) {
+            throw new CustomError(401, "User unauthorized ")
+        }
+
+        if (title) {
+            await this.taskData.updateTaskTitle(id, title)
+        }
+
+        if (done) {
+            let status: boolean
+            const validateStatus = stringToDone(done.toUpperCase())
+
+            const validateDone = booleanToDone(validateStatus, status)
+
+            await this.taskData.updateTaskStatus(id, validateDone)
+        }
+
+        if (date) {
+
+            const taskDate = this.dateFormat.formatPT(date) as Date
+            await this.taskData.updateTaskDate(id, taskDate)
+
+        }
+
+        if (!title && !done && !date) {
+            throw new CustomError(422, "Please let us know what you want to update.")
+
+        }
+
+        const accessToken = this.authenticator.generateToken({ id: userId })
+
+        return accessToken
     }
 }
