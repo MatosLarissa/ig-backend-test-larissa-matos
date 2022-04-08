@@ -1,7 +1,7 @@
 import { IdGenerator } from "../../Services/IdGenerator";
 import { Authenticator } from "../../Services/Authenticator";
 import { CustomError } from "../../Error/CustomError";
-import { booleanToDone, stringToDone, Task, TaskInputDTO} from "../../Model/Task/Task";
+import { booleanToDone, stringToDone, Task, TaskInputDTO } from "../../Model/Task/Task";
 import { TaskRepository } from "./TaskRepository";
 import { DateFormat } from "../../Services/DateFormat";
 
@@ -72,5 +72,28 @@ export default class TaskBusiness {
         const accessToken = this.authenticator.generateToken({ id: userId })
 
         return accessToken
+    }
+    
+    getAllTaskByUser = async (token: string) => {
+
+        if (!token) {
+            throw new CustomError(422, "Please login")
+        }
+
+        const tokenData = this.authenticator.getTokenData(token)
+        if (!tokenData) {
+            throw new CustomError(422, "Invalid token.")
+        }
+
+        const userId = tokenData.id
+
+        const result = this.taskData.getAllTaskByUser(userId)
+
+        if (!result) {
+            throw new CustomError(404, "Task not found.")
+        }
+
+        return result
+
     }
 }
