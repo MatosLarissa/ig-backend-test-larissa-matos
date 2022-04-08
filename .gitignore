@@ -1,4 +1,5 @@
 .env
+Procfile
 node_modules
 build
 ormconfig
