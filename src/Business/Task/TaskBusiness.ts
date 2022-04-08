@@ -1,7 +1,7 @@
 import { IdGenerator } from "../../Services/IdGenerator";
 import { Authenticator } from "../../Services/Authenticator";
 import { CustomError } from "../../Error/CustomError";
-import { booleanToDone, getTasksInputDTO, stringToDone, Task, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
+import { booleanToDone, deleteTaskInputDTO, getTasksInputDTO, stringToDone, Task, TaskInputDTO, UpdateTaskInputDTO } from "../../Model/Task/Task";
 import { TaskRepository } from "./TaskRepository";
 import { DateFormat } from "../../Services/DateFormat";
 
@@ -195,6 +195,42 @@ export default class TaskBusiness {
         if (!title && !done && !date) {
             throw new CustomError(422, "Please let us know what you want to update.")
 
+        }
+
+        const accessToken = this.authenticator.generateToken({ id: userId })
+
+        return accessToken
+    }
+
+    deleteTask = async (input: deleteTaskInputDTO) => {
+        const { token, id } = input
+
+        if (!token) {
+            throw new CustomError(422, "Please login")
+        }
+
+        const tokenData = this.authenticator.getTokenData(token)
+        if (!tokenData) {
+            throw new CustomError(422, "Invalid token.")
+        }
+
+        const userId = tokenData.id
+
+        const task = await this.taskData.getTaskById(id)
+        if (!task) {
+            throw new CustomError(404, "Task not found.")
+        }
+
+        const checkTaskUser = await this.taskData.getTaskByUser(id, userId)
+        if (!checkTaskUser) {
+            throw new CustomError(401, "User unauthorized ")
+        }
+
+        await this.taskData.deleteTaskById(id)
+
+        const taskCheck = await this.taskData.getTaskById(id)
+        if (taskCheck) {
+            throw new CustomError(412, "Precondition failed")
         }
 
         const accessToken = this.authenticator.generateToken({ id: userId })
