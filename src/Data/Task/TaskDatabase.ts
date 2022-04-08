@@ -162,4 +162,20 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         }
         await BaseDatabase.destroyConnection()
     }
+
+    deleteTaskById = async (id: string) => {
+        try {
+            await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .where({ id })
+                .delete()
+
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+            error.sqlMessage
+        }
+        await BaseDatabase.destroyConnection()
+    }
 }
