@@ -43,4 +43,20 @@ export default class UserDatabase extends BaseDatabase implements UserRepository
         await BaseDatabase.destroyConnection()
     }
 
+    getUserByCpf = async (cpf: number) => {
+        try {
+            const result: User[] = await BaseDatabase
+                .connection(this.TABLE_NAME)
+                .select()
+                .where({ cpf })
+            return result[0] && User.toUserModel(result[0])
+
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw new Error(error.message)
+            }
+        }
+        await BaseDatabase.destroyConnection()
+    }
+
 }

@@ -61,6 +61,10 @@ export default class UserBusiness {
         if (searchingExistingEmail) {
             throw new CustomError(409, "This e-mail is already in use.")
         }
+        const searchingExistingCpf = await this.userData.getUserByCpf(cpf)
+        if (searchingExistingCpf) {
+            throw new CustomError(409, "This cpf is already in use.")
+        }
 
         const id =  this.idGenerator.generate()
 
