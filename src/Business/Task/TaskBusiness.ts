@@ -3,6 +3,7 @@ import { Authenticator } from "../../Services/Authenticator";
 import { CustomError } from "../../Error/CustomError";
 import { booleanToDone, stringToDone, Task, TaskInputDTO} from "../../Model/Task/Task";
 import { TaskRepository } from "./TaskRepository";
+import { DateFormat } from "../../Services/DateFormat";
 
 
 export default class TaskBusiness {
@@ -10,7 +11,7 @@ export default class TaskBusiness {
     private taskData: TaskRepository
     private idGenerator: IdGenerator
     private authenticator: Authenticator
-
+    private dateFormat: DateFormat
 
 
     constructor(taskDataImplementation: TaskRepository) {
@@ -18,6 +19,7 @@ export default class TaskBusiness {
         this.taskData = taskDataImplementation
         this.idGenerator = new IdGenerator()
         this.authenticator = new Authenticator()
+        this.dateFormat = new DateFormat()
     }
 
     createTask = async (input: TaskInputDTO) => {
@@ -46,6 +48,8 @@ export default class TaskBusiness {
 
         const dateCreated = new Date()
 
+        const taskDate = this.dateFormat.formatPT(date)
+
         let status: boolean
 
         const validateStatus = stringToDone(done.toUpperCase())
@@ -59,7 +63,7 @@ export default class TaskBusiness {
             dateCreated,
             title,
             validateDone,
-            date,
+            taskDate,
             userId
         )
 
