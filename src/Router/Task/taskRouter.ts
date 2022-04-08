@@ -7,3 +7,4 @@ const taskController = new TaskController()
 
 taskRouter.post("/creatTask", taskController.createTask)
 taskRouter.get("/", taskController.getAllTaskByUser)
+taskRouter.get("/getTask", taskController.getTaskByIdOrStatus)
