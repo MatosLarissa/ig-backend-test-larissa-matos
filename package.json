@@ -7,8 +7,8 @@
     "node": "16.14.0"
   },
   "scripts": {
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts",
-    "start": "tsc && tsnd ./src/index.ts",
+    "dev": "tsc && tsnd ./src/index.ts",
+    "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts",
     "migrations": "tsnd ./src/Data/Migrations/migrations.ts"
   },
   "dependencies": {
