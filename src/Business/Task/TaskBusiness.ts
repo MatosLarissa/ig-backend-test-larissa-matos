@@ -151,6 +151,10 @@ export default class TaskBusiness {
             throw new CustomError(422, "Please login")
         }
 
+        if (!id) {
+            throw new CustomError(422, "Please enter the parameter id")
+        }
+
         const tokenData = this.authenticator.getTokenData(token)
         if (!tokenData) {
             throw new CustomError(422, "Invalid token.")
