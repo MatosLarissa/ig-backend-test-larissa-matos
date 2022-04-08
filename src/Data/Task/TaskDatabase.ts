@@ -23,7 +23,7 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         } catch (error) {
             if (error instanceof CustomError) {
                 throw new Error(error.message)
-            } error.sqlMessage
+            }
         }
     }
 
@@ -52,7 +52,7 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
         } catch (error) {
             if (error instanceof CustomError) {
                 throw new Error(error.message)
-            } error.sqlMessage
+            }
         }
     }
 
@@ -174,7 +174,6 @@ export default class TaskDatabase extends BaseDatabase implements TaskRepository
             if (error instanceof CustomError) {
                 throw new Error(error.message)
             }
-            error.sqlMessage
         }
         await BaseDatabase.destroyConnection()
     }
