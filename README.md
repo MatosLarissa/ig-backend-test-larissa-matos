@@ -1,30 +1,9 @@
 # Task Manager API
+ 
  API represents the task management system
 
-📋 Documentação: https://documenter.getpostman.com/view/18385856/UVyxRZv6
 
-
-🛠️ Technologies used:
-
-→ MySql;
-
-→ Express;
-
-→ Knex;
-
-→ Node.js:
-
-→ Typescript;
-
-→ Dotenv;
-
-→ Cors;
-
-→ BCRYPT;
-
-→ UUID;
-
-→ JWToken;
+#### 📋 Documentação: https://documenter.getpostman.com/view/18385856/UVyxRZv6
 
 
 ## First steps
@@ -51,6 +30,28 @@
    ```
 
 * Run `npm run migrations` to add the tables to the database (if successful, the server will be ready to receive requests) 
+
+## 🛠️ Technologies used:
+
+→ MySql;
+
+→ Express;
+
+→ Knex;
+
+→ Node.js:
+
+→ Typescript;
+
+→ Dotenv;
+
+→ Cors;
+
+→ BCRYPT;
+
+→ UUID;
+
+→ JWToken;
 
 <br/>
 
