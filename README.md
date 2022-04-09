@@ -1,6 +1,60 @@
 # Task Manager API
+ API represents the task management system
 
-<p style="text-align: justify;"> Create a task manager app, where you can create the user and after logging in, create the tasks for this user. </p> <br><br>
+📋 Documentação: https://documenter.getpostman.com/view/18385856/UVyxRZv6
+
+
+🛠️ Technologies used:
+
+→ MySql;
+
+→ Express;
+
+→ Knex;
+
+→ Node.js:
+
+→ Typescript;
+
+→ Dotenv;
+
+→ Cors;
+
+→ BCRYPT;
+
+→ UUID;
+
+→ JWToken;
+
+
+## First steps
+
+#### To run in a docker container:
+ - $ docker run --name MyContainer -p 3333:3333 -d larissamo/dockernode
+* URL base: http://localhost:3333
+
+
+#### To clone this repository
+* Run `npm install` to add the dependencies
+* Create an .env file at the project root and fill in the following keys with the appropriate values:
+   ```
+    PORT =
+    DB_PORT =
+    DB_HOST = 
+    DB_USER = 
+    DB_PASSWORD = 
+    DB_SCHEMA = 
+    JWT_KEY = 
+    ACCESS_TOKEN_EXPIRES_IN = 
+    BCRYPT_COST = 
+
+   ```
+
+* Run `npm run migrations` to add the tables to the database (if successful, the server will be ready to receive requests) 
+
+<br/>
+
+
 
 ## Requirements:
 
