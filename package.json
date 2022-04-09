@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts",
-    "start": "node ./build/index.js",
+    "start": "node build/index.js",
     "migrations": "tsnd ./src/Data/Migrations/migrations.ts"
   },
   "dependencies": {
